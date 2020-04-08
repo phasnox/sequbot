@@ -1,0 +1,45 @@
+version: '2'
+services:
+    hive-server:
+        restart: always
+        build: .
+        image: sequbot-ai:sequbot-ai
+        expose:
+            - 7777
+        volumes:
+            - /var/log/sequbot
+            - ../:/sequbot
+        command: server
+    node:
+        restart: always
+        image: sequbot-ai:sequbot-ai
+        build:
+          context: ./
+          dockerfile: Dockerfile-node
+        links:
+            - hive-server:hive-server
+        expose:
+            - 80
+        volumes:
+            - /var/log/sequbot
+            - /tmp/sequbot_cookies
+            - ../:/sequbot
+        depends_on: 
+            - hive-server
+        command: node hive-server
+    supervisor:
+        restart: always
+        image: sequbot-ai:sequbot-ai
+        links:
+            - hive-server:hive-server
+            - node:node
+        volumes:
+            - /var/log/sequbot
+            - ../:/sequbot
+            - /etc/hosts:/etc/hosts
+        command: supervisor
+
+networks:
+    default:
+      external:
+        name:  sequbotdata_default

@@ -1,0 +1,1 @@
+class LimitedAccessToUser(Exception): pass

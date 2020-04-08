@@ -1,0 +1,4 @@
+.env
+__pycache__/
+summary_logs/
+data.json

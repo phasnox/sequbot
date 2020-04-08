@@ -1,0 +1,41 @@
+FROM debian:latest
+
+# Update and install stuff
+RUN apt-get -y update 
+RUN apt-get -y --fix-missing install
+RUN apt-get -y install libpq-dev 
+RUN apt-get -y install python3 python3-pip python3-dev
+RUN apt-get -y install git
+RUN apt-get -y install openssh-server
+RUN apt-get -y install libffi-dev libxml2-dev libxslt1-dev zlib1g-dev
+RUN /etc/init.d/ssh restart
+
+# Python dependencies
+ADD requirements.txt /
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
+RUN pip3 install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp34-cp34m-linux_x86_64.whl
+
+# Env variables
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+ENV PYTHONPATH=$PYTHONPATH:/sequbot
+
+ENV https_proxy=http://sequbot:sb210913@us-fl.proxymesh.com:31280
+ENV http_proxy=http://sequbot:sb210913@us-fl.proxymesh.com:31280
+
+# CUDA for using the gpu in tensorflow
+#RUN apt-get install gcc g++ gcc-4.8 g++-4.8 gcc-4.9 g++-4.9 libxi libxi6 libxi-dev libglu1-mesa libglu1-mesa-dev libxmu6 libxmu6-dev linux-headers-amd64 linux-source
+#RUN wget http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run -P /tmp/
+#RUN bash cuda_7.5.18_linux.run
+
+# Ports
+EXPOSE 7777
+
+RUN mkdir /tmp/sequbot_pids
+
+WORKDIR "/sequbot/sequbot_ai/"
+
+# Setup volumes
+VOLUME ["/sequbot", "/var/log/sequbot/", "/tmp/sequbot_cookies"]
+
+ENTRYPOINT ["/usr/bin/python3", "/sequbot/sequbot_ai/manage.py"]

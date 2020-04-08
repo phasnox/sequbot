@@ -1,0 +1,3 @@
+class InstagramRobotError(Exception):
+    pass
+

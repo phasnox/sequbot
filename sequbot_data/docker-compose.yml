@@ -1,0 +1,17 @@
+version: '2'
+services:
+    sequbot-database:
+        restart: always
+        build: .
+        image: sequbot-database:sequbot-database
+        expose:
+            - 5432
+        volumes:
+            - sequbot-data-volume:/var/lib/postgresql
+            - ./backup:/var/lib/postgresql/backup
+            - ./scripts/entrypoint.sh:/entrypoint.sh
+        command: start
+        container_name: sequbot-database
+
+volumes:
+    sequbot-data-volume:

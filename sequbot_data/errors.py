@@ -1,0 +1,1 @@
+class SocialAccountAlreadyExists(Exception): pass
