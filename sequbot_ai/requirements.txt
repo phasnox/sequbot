@@ -33,7 +33,7 @@ python-dateutil==2.5.2
 python-instagram==1.3.2
 pytz==2016.3
 queuelib==1.4.2
-requests==2.10.0
+requests==2.20.0
 rpdb==0.1.6
 service-identity==16.0.0
 simplegeneric==0.8.1
