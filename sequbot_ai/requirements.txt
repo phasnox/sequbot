@@ -3,7 +3,7 @@ backports.shutil-get-terminal-size==1.0.0
 Beaker==1.8.0
 bottle==0.12.9
 cffi==1.5.2
-cryptography==1.2.3
+cryptography==3.2
 cssselect==0.9.1
 cycler==0.10.0
 decorator==4.0.9
